@@ -9084,3 +9084,12 @@ a.button {
 
 .main-content {
   background-color: #444; }
+
+.bar-post-modal {
+  border: none; }
+
+.post-content {
+  background-color: #ffc900; }
+
+.big-money {
+  font-size: 35pt; }

@@ -18,7 +18,13 @@
 <body ng-app="starter">
     <ion-pane ng-controller="MainController">
         <ion-header-bar class="bar-balanced">
+            <button class="button button-clear" ng-click='createPost()'>
+                <i class="icon ionicon ion-plus-round"></i> Criar post
+            </button>
             <h1 class="title">Find My Pet</h1>
+            <button class="button button-clear" ng-click='toggleMap()'>
+                <i class="icon ionicon" ng-class="{ 'ion-map': !showMap, 'ion-ios-list-outline': showMap }"></i>
+            </button>
         </ion-header-bar>
         <ion-content class='main-content padding'>
             <div class="list card" ng-repeat="post in posts">
@@ -37,7 +43,7 @@
                 </div>
                 <div class="item tabs tabs-secondary tabs-icon-left">
                     <a class="tab-item assertive" href="#">
-                      <i class="icon ionicon ion-ios-heart-outline"></i> Ajudar
+                        <i class="icon ionicon ion-ios-heart-outline"></i> Ajudar
                     </a>
                     <a class="tab-item balanced" href="#">
                         <i class="icon ionicon ion-ios-telephone-outline"></i> Ligar

@@ -18,8 +18,9 @@ angular.module('starter', ['ionic'])
     });
 })
 
-.controller('MainController', ['$scope', function($scope) {
+.controller('MainController', ['$scope', '$ionicModal', function($scope, $ionicModal) {
     $scope.posts = [];
+    $scope.showMap = false;
 
     for (var i = 1; i >= 1; i--) {
         $scope.posts.push(newPost(i, i, i));
@@ -35,10 +36,35 @@ angular.module('starter', ['ionic'])
         };
     }
 
-    $scope.createPost = function() {
-        var x = Math.floor((Math.random() * 10) + 1);
-        $scope.posts.push(newPost(x, x, x));
+    $scope.toggleMap = function(){
+      $scope.showMap = !$scope.showMap;
     }
+
+    $scope.createPost = function() {
+        $ionicModal.fromTemplateUrl('templates/modal-create-post.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal) {
+            $scope.newPost = {
+                reward: 5
+            };
+
+            $scope.modal = modal;
+            $scope.modal.show();
+            var x = Math.floor((Math.random() * 10) + 1);
+            $scope.posts.push(newPost(x, x, x));
+        });
+    }
+
+    $scope.closeModal = function() {
+        $scope.modal.remove();
+    };
+    //Cleanup the modal when we're done with it!
+    $scope.$on('$destroy', function() {
+        if ($scope.modal) {
+            $scope.modal.remove();
+        }
+    });
 
 }])
 
