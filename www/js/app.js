@@ -21,19 +21,24 @@ angular.module('starter', ['ionic'])
 .controller('MainController', ['$scope', function($scope) {
     $scope.posts = [];
 
-    for (var i = 10; i >= 1; i--) {
-        $scope.posts.push({
-            id: i,
-            username: i,
-            user_img: "http://lorempixel.com/60/60/people/" + i,
-            img: "http://lorempixel.com/300/150/animals/" + i,
-            reward: i
-        });
+    for (var i = 1; i >= 1; i--) {
+        $scope.posts.push(newPost(i, i, i));
     }
 
-    $scope.getArray = function(num) {
-        return new Array(num);
-    };
+    function newPost(id, username, reward) {
+        return {
+            id: id,
+            username: username,
+            user_img: "http://lorempixel.com/60/60/people/" + id,
+            img: "http://lorempixel.com/300/150/animals/" + id,
+            reward: reward
+        };
+    }
+
+    $scope.createPost = function() {
+        var x = Math.floor((Math.random() * 10) + 1);
+        $scope.posts.push(newPost(x, x, x));
+    }
 
 }])
 
@@ -71,7 +76,7 @@ angular.module('starter', ['ionic'])
     }
 })
 
-.directive('imgLoader', ['$compile', function($compile) {
+.directive('imgLoader', ['$compile', '$ionicScrollDelegate', function($compile, $ionicScrollDelegate) {
     return {
         restrict: 'A',
         link: link,
@@ -80,9 +85,9 @@ angular.module('starter', ['ionic'])
     };
 
     function link(scope, element, attrs, controllers) {
-        scope.$watch('imgLoader', function(oldValue,newValue) {
-            if(oldValue !== newValue){
-              loadImage();
+        scope.$watch('imgLoader', function(oldValue, newValue) {
+            if (oldValue !== newValue) {
+                loadImage();
             }
         });
         loadImage();
@@ -91,10 +96,9 @@ angular.module('starter', ['ionic'])
             img = new Image();
             img.src = attrs.imgLoader;
             img.onload = function() {
-                var imgEl = document.createElement('img');
-                imgEl.src = attrs.imgLoader;
-                element.replaceWith(imgEl);
-                element = imgEl;
+                element.replaceWith(img);
+                element = img;
+                $ionicScrollDelegate.resize();
             };
         }
     }
