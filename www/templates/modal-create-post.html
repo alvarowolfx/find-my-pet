@@ -38,6 +38,14 @@
                  ng-model='newPost.title' ng-maxlength="100"
                  ng-required>
         </div>
+        <div class="item assertive" ng-hide="formPost.phone.$valid && newPost.phone">
+          Informe um telefone de contato valido
+        </div>
+        <div class="item item-input">
+          <i class="icon ion-ios-telephone"></i>
+          <input type="tel" placeholder="Telefone de contato" name="phone"
+                 ng-model='newPost.phone' ui-br-phone-number="">
+        </div>
         <div class="item item-toggle">
           <i class="icon ion-location"></i> Compartilhar Localização ?
           <label class="toggle toggle-balanced">

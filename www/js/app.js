@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic'])
+angular.module('starter', ['ionic', 'ui.utils.masks'])
 
   .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -18,25 +18,9 @@ angular.module('starter', ['ionic'])
     });
   })
 
-  .controller('MainController', ['$scope', '$ionicModal', function ($scope, $ionicModal) {
-    $scope.posts = [];
+  .controller('MainController', ['$scope', '$ionicModal', 'Post', function ($scope, $ionicModal, Post) {
+    $scope.posts = Post.all();
     $scope.showMap = false;
-
-    var qtdePosts = 5;
-    for (var i = qtdePosts; i >= 1; i--) {
-      $scope.posts.unshift(newPost(i, i));
-    }
-
-    function newPost(title, reward, description) {
-      var id = $scope.posts.length;
-      return {
-        id: id,
-        title: title,
-        img: "http://lorempixel.com/300/150/animals/" + id,
-        description: description,
-        reward: reward
-      };
-    }
 
     $scope.toggleMap = function () {
       $scope.showMap = !$scope.showMap;
@@ -58,9 +42,9 @@ angular.module('starter', ['ionic'])
 
     $scope.savePost = function (form) {
       var post = angular.copy($scope.newPost);
-      if(form.$valid && post.title) {
-        post = newPost(post.title, post.reward, post.description);
-        $scope.posts.unshift(post);
+      if (form.$valid && post.title) {
+        Post.create(post);
+        $scope.posts = Post.all();
         $scope.closeModal();
       }
     };
@@ -69,4 +53,40 @@ angular.module('starter', ['ionic'])
       $scope.modal.remove();
     };
 
-  }]);
+  }])
+
+  .factory('Post', function () {
+    var service = {
+      all: all,
+      create: create
+    };
+
+    var posts = [];
+    var qtdePosts = 5;
+    for (var i = qtdePosts; i >= 1; i--) {
+      posts.unshift(newTestPost(i, i));
+    }
+
+    return service;
+
+    function all() {
+      return posts;
+    }
+
+    function newTestPost(title, reward) {
+      var id = posts.length;
+      return {
+        id: id,
+        title: title,
+        img: "http://lorempixel.com/300/150/animals/" + id,
+        reward: reward
+      };
+    }
+
+    function create(post) {
+      var id = posts.length;
+      post.id = id;
+      post.img = "http://lorempixel.com/300/150/animals/" + id;
+      posts.unshift(post);
+    }
+  });

@@ -9,6 +9,7 @@
   <link href="css/ionic.app.css" rel="stylesheet">
   <!-- ionic/angularjs js -->
   <script src="lib/ionic/js/ionic.bundle.js"></script>
+  <script src="lib/angular-input-masks/angular-input-masks-standalone.min.js"></script>
   <!-- cordova script (this will be a 404 during development) -->
   <script src="cordova.js"></script>
   <!-- your app's js -->
@@ -46,7 +47,7 @@
         <a class="tab-item assertive" href="#">
           <i class="icon ionicon ion-ios-heart-outline"></i> Ajudar
         </a>
-        <a class="tab-item balanced" href="#">
+        <a class="tab-item balanced" href="tel:{{ post.phone }}" ng-if='post.phone'>
           <i class="icon ionicon ion-ios-telephone-outline"></i> Ligar
         </a>
       </div>
