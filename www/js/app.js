@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic', 'ui.utils.masks'])
+angular.module('starter', ['ionic', 'ui.utils.masks', 'ngCordova'])
 
   .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -24,7 +24,7 @@ angular.module('starter', ['ionic', 'ui.utils.masks'])
 
     $scope.toggleMap = function () {
       $scope.showMap = !$scope.showMap;
-    }
+    };
 
     $scope.createPost = function () {
       $ionicModal.fromTemplateUrl('templates/modal-create-post.html', {
@@ -55,7 +55,7 @@ angular.module('starter', ['ionic', 'ui.utils.masks'])
 
   }])
 
-  .factory('Post', function () {
+  .factory('Post', ['User', function (User) {
     var service = {
       all: all,
       create: create
@@ -87,6 +87,25 @@ angular.module('starter', ['ionic', 'ui.utils.masks'])
       var id = posts.length;
       post.id = id;
       post.img = "http://lorempixel.com/300/150/animals/" + id;
+      post.user_id = User.getUserIdentifier();
       posts.unshift(post);
     }
-  });
+  }])
+  .factory('User', ['$cordovaDevice', function($cordovaDevice){
+    var service = {
+      getUserIdentifier: getUserIdentifier
+    };
+
+    var userId;
+    try {
+      userId = $cordovaDevice.getUUID();
+    }catch(e) {
+      userId = "FAKE_USER_ID_" + Math.random();
+    }
+
+    return service;
+
+    function getUserIdentifier() {
+      return userId;
+    }
+  }]);
