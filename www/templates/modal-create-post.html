@@ -4,7 +4,7 @@
             <i class="icon ionicon ion-close"></i>
         </button>
         <h1 class="title">Criar Postagem</h1>
-        <button class="button button-clear" ng-click='closeModal()'>
+        <button class="button button-clear" ng-click='savePost()'>
             Postar <i class="icon ionicon ion-share"></i>
         </button>
     </ion-header-bar>
@@ -29,9 +29,14 @@
                 </div>
             </div>
             <div class="list list-inset">
+                <div class="item assertive" ng-hide="formPost.title.$valid && newPost.title">
+                  Informe o titulo com até 100 caracteres
+                </div>
                 <div class="item item-input">
                     <i class="icon ion-person"></i>
-                    <input type="text" placeholder="Nome" ng-model='newPost.username'>
+                    <input type="text" placeholder="Titulo" name="title"
+                           ng-model='newPost.title' ng-maxlength="100"
+                           ng-required>
                 </div>
                 <div class="item item-toggle">
                     <i class="icon ion-location"></i> Compartilhar Localização ?
