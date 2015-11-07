@@ -24,15 +24,16 @@ angular.module('starter', ['ionic'])
 
     var qtdePosts = 5;
     for (var i = qtdePosts; i >= 1; i--) {
-      $scope.posts.unshift(newPost(i, i, i));
+      $scope.posts.unshift(newPost(i, i));
     }
 
-    function newPost(id, title, reward) {
+    function newPost(title, reward, description) {
+      var id = $scope.posts.length;
       return {
         id: id,
         title: title,
-        user_img: "http://lorempixel.com/60/60/people/" + id,
         img: "http://lorempixel.com/300/150/animals/" + id,
+        description: description,
         reward: reward
       };
     }
@@ -55,14 +56,13 @@ angular.module('starter', ['ionic'])
       });
     };
 
-    $scope.savePost = function () {
+    $scope.savePost = function (form) {
       var post = angular.copy($scope.newPost);
-      console.log(post);
-
-      var x = post.reward;
-      $scope.posts.unshift(newPost(x,x,x));
-
-      $scope.closeModal();
+      if(form.$valid && post.title) {
+        post = newPost(post.title, post.reward, post.description);
+        $scope.posts.unshift(post);
+        $scope.closeModal();
+      }
     };
 
     $scope.closeModal = function () {

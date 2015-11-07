@@ -1,68 +1,69 @@
 <ion-modal-view>
+  <form name="formPost">
     <ion-header-bar class='bar-energized bar-post-modal'>
-        <button class="button button-clear" ng-click='closeModal()'>
-            <i class="icon ionicon ion-close"></i>
-        </button>
-        <h1 class="title">Criar Postagem</h1>
-        <button class="button button-clear" ng-click='savePost()'>
-            Postar <i class="icon ionicon ion-share"></i>
-        </button>
+      <button class="button button-clear" ng-click='closeModal()'>
+        <i class="icon ionicon ion-close"></i>
+      </button>
+      <h1 class="title">Criar Postagem</h1>
+      <button class="button button-clear" ng-click='savePost(formPost)'>
+        Postar <i class="icon ionicon ion-share"></i>
+      </button>
     </ion-header-bar>
     <ion-content class='post-content'>
-        <form name='formPost'>
-            <div class='list card' ng-if="vm.record.photo">
-                <div class='item item-image'>
-                    <img ng-src='data:image/jpeg;base64,{{ vm.record.photo }}'>
-                </div>
+      <div class='list card' ng-if="post.photo">
+        <div class='item item-image'>
+          <img ng-src='data:image/jpeg;base64,{{ post.photo }}'>
+        </div>
+      </div>
+      <!--ng-if='::vm.cameraAvailable && !vm.isShowing' -->
+      <div class="row">
+        <div class="col">
+          <button class='button button-block button-light' ng-click='takePicture()'>
+            <i class='icon ion-camera'></i> Tirar foto
+          </button>
+        </div>
+        <div class="col">
+          <button class="button button-block button-light" ng-click='selectPicture()'>
+            <i class='icon ion-ios-photos'></i>Escolher foto
+          </button>
+        </div>
+      </div>
+      <div class="list list-inset">
+        <div class="item assertive" ng-hide="formPost.title.$valid && newPost.title">
+          Informe o titulo com até 100 caracteres
+        </div>
+        <div class="item item-input">
+          <i class="icon ion-edit"></i>
+          <input type="text" placeholder="Titulo" name="title"
+                 ng-model='newPost.title' ng-maxlength="100"
+                 ng-required>
+        </div>
+        <div class="item item-toggle">
+          <i class="icon ion-location"></i> Compartilhar Localização ?
+          <label class="toggle toggle-balanced">
+            <input type="checkbox" ng-model='newPost.shareLocation'>
+
+            <div class="track">
+              <div class="handle"></div>
             </div>
-            <!--ng-if='::vm.cameraAvailable && !vm.isShowing' -->
-            <div class="row">
-                <div class="col">
-                    <button class='button button-block button-light' ng-click='takePicture()'>
-                        <i class='icon ion-camera'></i> Tirar foto
-                    </button>
-                </div>
-                <div class="col">
-                    <button class="button button-block button-light" ng-click='selectPicture()'>
-                        <i class='icon ion-ios-photos'></i>Escolher foto
-                    </button>
-                </div>
-            </div>
-            <div class="list list-inset">
-                <div class="item assertive" ng-hide="formPost.title.$valid && newPost.title">
-                  Informe o titulo com até 100 caracteres
-                </div>
-                <div class="item item-input">
-                    <i class="icon ion-person"></i>
-                    <input type="text" placeholder="Titulo" name="title"
-                           ng-model='newPost.title' ng-maxlength="100"
-                           ng-required>
-                </div>
-                <div class="item item-toggle">
-                    <i class="icon ion-location"></i> Compartilhar Localização ?
-                    <label class="toggle toggle-balanced">
-                        <input type="checkbox" ng-model='newPost.shareLocation'>
-                        <div class="track">
-                            <div class="handle"></div>
-                        </div>
-                </div>
-                <div class="item text-center item-text-wrap" ng-show='newPost.shareLocation'>
-                    Obtendo localização ...
-                    <br/>
-                    <ion-spinner icon='ripple' />
-                </div>
-                <div class="item range range-balanced">
-                    <span>💰</span>
-                    <input type="range" ng-model="newPost.reward" min="1" max="10" value="5">
-                    <span class='big-money'>💰</span>
-                </div>
-                <div class="item">
-                    Valor da recompensa : {{ newPost.reward }} dinheiros
-                </div>
-                <label class="item item-input">
-                    <textarea placeholder="Descrição" ng-model='newPost.description' rows='10'></textarea>
-                </label>
-            </div>
-        </form>
+        </div>
+        <div class="item text-center item-text-wrap" ng-show='newPost.shareLocation'>
+          Obtendo localização ...
+          <br/>
+          <ion-spinner icon='ripple'/>
+        </div>
+        <div class="item range range-balanced">
+          <span>💰</span>
+          <input type="range" ng-model="newPost.reward" min="1" max="10" value="5">
+          <span class='big-money'>💰</span>
+        </div>
+        <div class="item">
+          Valor da recompensa : {{ newPost.reward }} dinheiros
+        </div>
+        <label class="item item-input">
+          <textarea placeholder="Descrição" ng-model='newPost.description' rows='10'></textarea>
+        </label>
+      </div>
     </ion-content>
+  </form>
 </ion-modal-view>
