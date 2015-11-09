@@ -10,6 +10,8 @@
   <!-- ionic/angularjs js -->
   <script src="lib/ionic/js/ionic.bundle.js"></script>
   <script src="lib/angular-input-masks/angular-input-masks-standalone.min.js"></script>
+  <script src="lib/firebase/firebase.js"></script>
+  <script src="lib/angularfire/dist/angularfire.js"></script>
   <script src="lib/ngCordova/dist/ng-cordova.js"></script>
   <!-- cordova script (this will be a 404 during development) -->
   <script src="cordova.js"></script>
@@ -32,7 +34,8 @@
   <ion-content class='main-content padding'>
     <div class="list card" ng-repeat="post in posts">
       <div class="item item-balanced item-text-wrap" href="#">
-        <h2 class="stable">{{ post.title }} - {{ post.user_id }}</h2>
+        <h2 class="stable">{{ post.title }}</h2>
+
         <p>
           <strong class="stable">Recompensa :</strong>
           <span ng-times='::post.reward'>💰</span>
