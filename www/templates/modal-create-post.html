@@ -10,12 +10,11 @@
       </button>
     </ion-header-bar>
     <ion-content class='post-content'>
-      <div class='list card' ng-if="post.photo">
+      <div class='list card' ng-if="newPost.photo">
         <div class='item item-image'>
-          <img ng-src='data:image/jpeg;base64,{{ post.photo }}'>
+          <img ng-src='data:image/jpeg;base64,{{ newPost.photo }}'>
         </div>
       </div>
-      <!--ng-if='::vm.cameraAvailable && !vm.isShowing' -->
       <div class="row">
         <div class="col">
           <button class='button button-block button-light' ng-click='takePicture()'>
@@ -46,6 +45,7 @@
           <input type="tel" placeholder="Telefone de contato" name="phone"
                  ng-model='newPost.phone' ui-br-phone-number="">
         </div>
+        <!--
         <div class="item item-toggle">
           <i class="icon ion-location"></i> Compartilhar Localização ?
           <label class="toggle toggle-balanced">
@@ -60,6 +60,7 @@
           <br/>
           <ion-spinner icon='ripple'/>
         </div>
+        -->
         <div class="item range range-balanced">
           <span>💰</span>
           <input type="range" ng-model="newPost.reward" min="1" max="10" value="5">

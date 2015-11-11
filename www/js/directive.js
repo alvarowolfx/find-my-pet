@@ -30,7 +30,7 @@ angular.module('starter').directive('ngTimes', function ($compile) {
       }
 
       scope.getArray = function () {
-        return new Array(scope.ngTimes);
+        return new Array(parseInt(scope.ngTimes));
       };
     }
   })

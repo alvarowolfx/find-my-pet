@@ -6,7 +6,7 @@
 var app = angular.module('starter', ['ionic', 'ui.utils.masks', 'ngCordova', 'firebase']);
 
 app.run(['$ionicPlatform', InitApp]);
-app.controller('MainController', ['$scope', '$ionicModal', 'Post', '$ionicLoading', MainController]);
+app.controller('MainController', ['$scope', '$ionicModal', 'Post', '$ionicLoading','$cordovaCamera', MainController]);
 app.constant("FirebaseURL", "https://scorching-fire-4975.firebaseio.com");
 app.factory('Post', ['User', 'FirebaseURL', '$firebaseArray', Post]);
 app.factory('User', ['$cordovaDevice', User]);
@@ -24,13 +24,13 @@ function InitApp($ionicPlatform) {
   });
 }
 
-function MainController($scope, $ionicModal, Post, $ionicLoading) {
+function MainController($scope, $ionicModal, Post, $ionicLoading, $cordovaCamera) {
   $scope.posts = Post.all();
   $ionicLoading.show();
   $scope.posts.$loaded().finally(function(){
     $ionicLoading.hide();
   });
-  //postsRef.$bindTo($scope,"posts");
+
 
   $scope.showMap = false;
 
@@ -54,7 +54,9 @@ function MainController($scope, $ionicModal, Post, $ionicLoading) {
 
   $scope.savePost = function (form) {
     var post = angular.copy($scope.newPost);
-    if (form.$valid && post.title) {
+    if (form.$valid && post.title && post.photo) {
+      post.img = 'data:image/jpeg;base64,'+post.photo;
+      delete post.photo;
       Post.create(post);
       $scope.posts = Post.all();
       $scope.closeModal();
@@ -64,6 +66,39 @@ function MainController($scope, $ionicModal, Post, $ionicLoading) {
   $scope.closeModal = function () {
     $scope.modal.remove();
   };
+
+  function getCommonCameraOption() {
+    return {
+      quality: 50,
+      destinationType: Camera.DestinationType.DATA_URL,
+      allowEdit: true,
+      encodingType: Camera.EncodingType.JPEG,
+      saveToPhotoAlbum: false
+    }
+  }
+
+  $scope.takePicture = function() {
+    var options = getCommonCameraOption();
+    options.sourceType = Camera.PictureSourceType.CAMERA;
+    getPictureWithOptions(options);
+  };
+
+  $scope.selectPicture = function() {
+    var options = getCommonCameraOption();
+    options.sourceType = Camera.PictureSourceType.PHOTOLIBRARY;
+    getPictureWithOptions(options);
+  };
+
+  function getPictureWithOptions(options) {
+    $ionicLoading.show();
+    $cordovaCamera.getPicture(options).then(function(imageData) {
+      $scope.newPost.photo = imageData;
+    }, function(err) {
+      // error
+    }).finally(function(){
+      $ionicLoading.hide();
+    });
+  }
 
 };
 
@@ -82,16 +117,11 @@ function Post(User, FirebaseURL, $firebaseArray) {
   }
 
   function create(post) {
-    var posts = all();
-    var id = posts.length + 1;
-    post.id = id;
-    post.img = "http://lorempixel.com/300/150/animals/" + id;
     post.user_id = User.getUserIdentifier();
     post.created_at = (new Date()).toISOString();
 
     var item = postsRef.push();
     item.setWithPriority(post, 0 - Date.now());
-    //posts.$add(post);
   }
 }
 
@@ -100,16 +130,18 @@ function User($cordovaDevice) {
     getUserIdentifier: getUserIdentifier
   };
 
-  var userId;
-  try {
-    userId = $cordovaDevice.getUUID();
-  } catch (e) {
-    userId = "FAKE_USER_ID_" + Math.random();
+  var token = window.localStorage.getItem('token');
+  if(!token) {
+    try {
+      token = $cordovaDevice.getUUID();
+    } catch (e) {
+      token = "FAKE_USER_ID_" + Math.random();
+    }
   }
 
   return service;
 
   function getUserIdentifier() {
-    return userId;
+    return token;
   }
 }
