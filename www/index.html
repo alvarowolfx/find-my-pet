@@ -45,8 +45,11 @@
         {{ post.description }}
       </div>
       <div class="item tabs tabs-secondary tabs-icon-left">
-        <a class="tab-item assertive" href="#">
-          <i class="icon ionicon ion-ios-heart-outline"></i> Ajudar
+        <a class="tab-item assertive" ng-click="likePost(post.$id)">
+          {{ post.likes.length || 0 }}
+          <i class="icon ionicon"
+             ng-class="{'ion-ios-heart-outline': !alreadyLiked(post), 'ion-ios-heart': alreadyLiked(post) }">
+          </i> Ajudar
         </a>
         <a class="tab-item balanced" href="tel:{{ post.phone }}" ng-if='post.phone'>
           <i class="icon ionicon ion-ios-telephone-outline"></i> Ligar

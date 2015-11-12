@@ -63,6 +63,14 @@ function MainController($scope, $ionicModal, Post, $ionicLoading, $cordovaCamera
     }
   };
 
+  $scope.likePost = function(post){
+    Post.like(post);
+  };
+
+  $scope.alreadyLiked = function(post){
+    return Post.alreadyLiked(post);
+  };
+
   $scope.closeModal = function () {
     $scope.modal.remove();
   };
@@ -105,7 +113,9 @@ function MainController($scope, $ionicModal, Post, $ionicLoading, $cordovaCamera
 function Post(User, FirebaseURL, $firebaseArray) {
   var service = {
     all: all,
-    create: create
+    create: create,
+    like: like,
+    alreadyLiked: alreadyLiked
   };
 
   var postsRef = new Firebase(FirebaseURL + '/posts');
@@ -123,6 +133,30 @@ function Post(User, FirebaseURL, $firebaseArray) {
     var item = postsRef.push();
     item.setWithPriority(post, 0 - Date.now());
   }
+
+  function like(postId){
+    var posts = all();
+    return posts.$loaded().then(function(){
+      var post = posts.$getRecord(postId);
+      if(alreadyLiked(post)){
+        return
+      }
+      post.likes = post.likes || [];
+      var user_id = User.getUserIdentifier();
+      post.likes.push(user_id);
+      posts.$save(post);
+    });
+
+  }
+
+  function alreadyLiked(post){
+    var user_id = User.getUserIdentifier();
+    if(!post.likes){
+      return false
+    }else{
+      return post.likes.indexOf(user_id) != -1;
+    }
+  }
 }
 
 function User($cordovaDevice) {
@@ -134,8 +168,10 @@ function User($cordovaDevice) {
   if(!token) {
     try {
       token = $cordovaDevice.getUUID();
+      window.localStorage.setItem('token',token);
     } catch (e) {
       token = "FAKE_USER_ID_" + Math.random();
+      window.localStorage.setItem('token',token);
     }
   }
 
