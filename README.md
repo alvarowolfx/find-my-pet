@@ -1,5 +1,8 @@
 # Find My Pet App
-This app was developed for demo purposes using Ionic and PouchDB for a Ionic Workshop. So I'm sharing the code for those who are interested in studying.
+This app was developed for demo purposes using Ionic and Firebase for a Ionic Workshop. So I'm sharing the code for those who are interested in studying.
+
+![promo1](https://raw.github.com/alvarowolfx/find-my-pet/master/resources/find-my-pet-promo-1.png)
+![promo2](https://raw.github.com/alvarowolfx/find-my-pet/master/resources/find-my-pet-promo-2.png)
 
 The presentation about the app can be seen [here](http://www.slideshare.net/alvarowolfx/ionic-workshop).
 
